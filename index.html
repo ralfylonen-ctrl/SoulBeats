@@ -3,347 +3,130 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SoulBeats</title>
-  <link rel="icon" type="image/png" href="fav.png" />
+  <title>Mood Quiz</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    @keyframes rainbow {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-    .rainbow-hover:hover {
-      background: linear-gradient(270deg, #ff0080, #ff8c00, #40e0d0, #8a2be2, #ff0080);
-      background-size: 1000% 1000%;
-      animation: rainbow 5s ease infinite;
-      transform: scale(1.1);
-    }
-    .fade-out {
-      animation: fadeOut 1s forwards;
-    }
-    .fade-in {
-      animation: fadeIn 1s forwards;
-    }
-    @keyframes fadeOut {
-      to { opacity: 0; }
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    body {
-      transition: background 1.5s ease;
-    }
+    body { background: #111722; color: white; min-height: 100vh; display: flex; justify-content: center; align-items: center; font-family: sans-serif; transition: background 1s ease; }
+    .quiz-container { max-width: 600px; text-align: center; padding: 20px; border-radius: 12px; }
+    .fade-in { animation: fadeIn 0.8s ease forwards; }
+    .fade-out { animation: fadeOut 0.8s ease forwards; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+    .option { background: #233148; padding: 12px 20px; margin: 10px 0; border-radius: 8px; cursor: pointer; transition: transform 0.3s, background 0.3s; }
+    .option:hover { background: #2e4053; transform: scale(1.05); }
   </style>
 </head>
-<body class="bg-[#111722] text-white min-h-screen flex flex-col justify-center items-center">
+<body>
 
-  <!-- Imagem principal -->
-  <div id="main-img" class="w-full max-w-4xl h-80 bg-center bg-cover rounded-xl mb-8"
-       style='background-image: url("img.png");'>
-  </div>
+<div class="quiz-container" id="quiz">
+  <h1 class="text-3xl mb-6">How are you feeling today?</h1>
+  <div id="options"></div>
+</div>
 
-  <!-- Botões de Mood -->
-  <div id="mood-buttons" class="flex flex-wrap gap-4 justify-center mb-8">
-    <button class="rainbow-hover px-6 py-3 rounded-full font-bold text-lg bg-[#233148] transition-all duration-300" onclick="startMood('happy')">Happy</button>
-    <button class="rainbow-hover px-6 py-3 rounded-full font-bold text-lg bg-[#233148] transition-all duration-300" onclick="startMood('sad')">Sad</button>
-    <button class="rainbow-hover px-6 py-3 rounded-full font-bold text-lg bg-[#233148] transition-all duration-300" onclick="startMood('angry')">Angry</button>
-    <button class="rainbow-hover px-6 py-3 rounded-full font-bold text-lg bg-[#233148] transition-all duration-300" onclick="startMood('lonely')">Lonely</button>
-    <button class="rainbow-hover px-6 py-3 rounded-full font-bold text-lg bg-[#233148] transition-all duration-300" onclick="startMood('anxious')">Anxious</button>
-    <button class="rainbow-hover px-6 py-3 rounded-full font-bold text-lg bg-[#233148] transition-all duration-300" onclick="startMood('bored')">Bored</button>
-    <button class="rainbow-hover px-6 py-3 rounded-full font-bold text-lg bg-[#233148] transition-all duration-300" onclick="startMood('stressed')">Stressed</button>
-  </div>
+<script>
+  // Estrutura do quiz
+  const quizData = {
+    start: {
+      question: "How are you feeling today?",
+      options: [
+        { text: "Happy", next: "happy" },
+        { text: "Sad", next: "sad" },
+        { text: "Angry", next: "angry" },
+        { text: "Lonely", next: "lonely" },
+        { text: "Anxious", next: "anxious" }
+      ]
+    },
+    happy: {
+      question: "Awesome! What is making you happy?",
+      options: [
+        { text: "Achievements", next: "happyAdvice" },
+        { text: "Friends", next: "happyAdvice" },
+        { text: "Hobbies", next: "happyAdvice" }
+      ]
+    },
+    sad: {
+      question: "It's okay to feel sad. Why are you sad?",
+      options: [
+        { text: "Work/School", next: "sadAdvice" },
+        { text: "Relationships", next: "sadAdvice" },
+        { text: "Feeling alone", next: "sadAdvice" }
+      ]
+    },
+    angry: {
+      question: "What made you angry?",
+      options: [
+        { text: "Someone said something", next: "angryAdvice" },
+        { text: "Something didn't go as planned", next: "angryAdvice" },
+        { text: "Other", next: "angryAdvice" }
+      ]
+    },
+    lonely: {
+      question: "Why do you feel lonely?",
+      options: [
+        { text: "No friends around", next: "lonelyAdvice" },
+        { text: "Feeling misunderstood", next: "lonelyAdvice" },
+        { text: "Other", next: "lonelyAdvice" }
+      ]
+    },
+    anxious: {
+      question: "What is causing your anxiety?",
+      options: [
+        { text: "Work/School", next: "anxiousAdvice" },
+        { text: "Relationships", next: "anxiousAdvice" },
+        { text: "Uncertainty about the future", next: "anxiousAdvice" }
+      ]
+    },
+    happyAdvice: {
+      advice: "Keep embracing what makes you happy! Share your joy with others and enjoy the moment 🌞"
+    },
+    sadAdvice: {
+      advice: "Take small steps to feel better: talk to someone you trust, write your feelings, and be kind to yourself 🌧️"
+    },
+    angryAdvice: {
+      advice: "Release your anger safely: breathe deeply, move your body, or write down your feelings 💥"
+    },
+    lonelyAdvice: {
+      advice: "Connect with someone: call a friend, join an online community, or engage in a hobby 🤝"
+    },
+    anxiousAdvice: {
+      advice: "Calm your mind: meditate, take deep breaths, focus on what you can control 🌿"
+    }
+  };
 
-  <!-- Botões de Mood -->
-  <div id="mood-buttons" class="flex flex-wrap gap-4 justify-center mb-8">
-  <!-- seus botões aqui -->
- </div>
+  const quizContainer = document.getElementById("quiz");
+  const optionsDiv = document.getElementById("options");
 
-<!-- Texto abaixo dos botões -->
-  <div id="mood-prompt" class="text-xl text-center text-gray-300 mt-4">
-  How are you feeling today?
-  </div>
+  function showStep(step) {
+    optionsDiv.innerHTML = '';
+    quizContainer.classList.remove("fade-in");
+    quizContainer.classList.add("fade-out");
 
+    setTimeout(() => {
+      quizContainer.classList.remove("fade-out");
+      quizContainer.classList.add("fade-in");
 
-  <!-- Mensagem motivacional -->
-  <div id="mood-message" class="text-4xl font-extrabold text-center mb-8 opacity-0"></div>
-
-  <!-- Área de Sugestões -->
-  <div id="suggestions" class="max-w-3xl text-center text-xl opacity-0"></div>
-
-  <!-- Navegação -->
-  <div id="nav-buttons" class="flex gap-8 mt-8 opacity-0">
-    <button id="back-btn" class="rainbow-hover px-6 py-3 rounded-full font-bold text-lg bg-[#233148] transition-all duration-300" onclick="prevTip()">Back</button>
-    <button id="done-btn" class="rainbow-hover px-6 py-3 rounded-full font-bold text-lg bg-[#233148] transition-all duration-300" onclick="nextTip()">Done</button>
-  </div>
-
-  <script>
-    // Detectar idioma do navegador
-    const userLang = navigator.language || navigator.userLanguage;
-    const lang = userLang.startsWith('pt') ? 'pt' : 'en';
-
-    const translations = {
-      en: {
-        messages: {
-          happy: "Awesome! Feeling Happy is a great start to brighten your day 🌞",
-          sad: "It’s okay to feel Sad. Let’s take small steps to feel better 🌧️",
-          angry: "Feeling Angry is natural. Let’s release it safely 💥",
-          lonely: "Being Lonely is normal. Let’s find ways to connect 🤝",
-          anxious: "Feeling Anxious is okay. Let’s calm your mind 🌿",
-          bored: "Boredom can be fun! Let’s explore something new 🎨",
-          stressed: "Feeling Stressed? Let’s relax and take control 🧘‍♂️"
-        },
-        buttons: { back: "Back", done: "Done" },
-        tips: {
-          happy: [
-            "Dance to your favorite song 🎵",
-            "Write down 3 things you're grateful for ✍️",
-            "Go for a walk in the sun ☀️",
-            "Call a friend and share your joy ☎️",
-            "Try cooking something fun 🍳",
-            "Do a random act of kindness ❤️",
-            "Draw or paint something colorful 🎨",
-            "Take a moment to meditate and breathe deeply 🧘‍♂️",
-            "Watch a comedy movie 🍿",
-            "Play a game that makes you laugh 🎮"
-          ],
-          sad: [
-            "Take a warm bath 🛁",
-            "Listen to a calming playlist 🎶",
-            "Write down your feelings in a journal 📝",
-            "Go for a walk outside and breathe fresh air 🌳",
-            "Call someone you trust and talk ☎️",
-            "Watch a feel-good movie 🎬",
-            "Do some light stretching 🧘‍♀️",
-            "Drink a comforting tea ☕",
-            "Cuddle with a pet 🐾",
-            "Draw or doodle your emotions 🎨"
-          ],
-          angry: [
-            "Do a quick workout to release tension 💪",
-            "Listen to music that relaxes you 🎧",
-            "Practice deep breathing for 5 minutes 🌬️",
-            "Write down what’s making you angry 🖊️",
-            "Take a short walk outside 🚶‍♂️",
-            "Scream into a pillow 😤",
-            "Try meditation or mindfulness 🧘‍♂️",
-            "Punch a stress ball 🥊",
-            "Stretch your muscles 🧘‍♀️",
-            "Listen to soothing sounds like rain 🌧️"
-          ],
-          lonely: [
-            "Call or message a friend ☎️",
-            "Join an online community or forum 💻",
-            "Watch a movie that makes you smile 🍿",
-            "Adopt a pet or spend time with animals 🐶",
-            "Write letters to someone you care about ✍️",
-            "Take a walk in a park and observe people 🌳",
-            "Try a new hobby that connects you online 🎨",
-            "Invite someone to a casual video chat 🎥",
-            "Start a creative project alone but fun 🎸",
-            "Practice self-care routines 🛀"
-          ],
-          anxious: [
-            "Try a 5-minute meditation 🧘‍♂️",
-            "Write down what’s bothering you 🖊️",
-            "Go outside and take deep breaths 🌳",
-            "Listen to calming music 🎧",
-            "Do light stretching exercises 🧘‍♀️",
-            "Drink water slowly 💧",
-            "Take a mindful walk and notice surroundings 🚶‍♂️",
-            "Visualize a peaceful place 🏞️",
-            "Write down positive affirmations ✨",
-            "Limit exposure to stressful news 📰"
-          ],
-          bored: [
-            "Try a new hobby or craft 🎨",
-            "Learn something new online 📚",
-            "Play a fun mini-game online 🎮",
-            "Listen to a podcast about an interesting topic 🎧",
-            "Rearrange your room 🛋️",
-            "Draw or doodle freely ✍️",
-            "Cook a new recipe 🍳",
-            "Take photos creatively 📸",
-            "Write a short story or poem 📝",
-            "Practice a skill you’ve always wanted to improve 🎸"
-          ],
-          stressed: [
-            "Take a short walk outside 🚶‍♂️",
-            "Listen to relaxing music 🎵",
-            "Do some light stretching exercises 🧘‍♀️",
-            "Write down what’s stressing you 📝",
-            "Practice deep breathing 🌬️",
-            "Drink herbal tea ☕",
-            "Try progressive muscle relaxation 💆‍♂️",
-            "Take a short nap 😴",
-            "Organize your desk or space 🧹",
-            "Focus on one task at a time 🎯"
-          ]
-        }
-      },
-      pt: {
-        messages: {
-          happy: "Incrível! Sentir-se feliz é um ótimo começo para iluminar seu dia 🌞",
-          sad: "Tudo bem sentir-se triste. Vamos dar pequenos passos para se sentir melhor 🌧️",
-          angry: "Sentir raiva é natural. Vamos liberar de forma segura 💥",
-          lonely: "Sentir-se sozinho é normal. Vamos encontrar formas de se conectar 🤝",
-          anxious: "Sentir ansiedade é normal. Vamos acalmar sua mente 🌿",
-          bored: "O tédio pode ser divertido! Vamos explorar algo novo 🎨",
-          stressed: "Sentir estresse? Vamos relaxar e retomar o controle 🧘‍♂️"
-        },
-        buttons: { back: "Voltar", done: "Próximo" },
-        tips: {
-          happy: [
-            "Dance sua música favorita 🎵",
-            "Escreva 3 coisas pelas quais você é grato ✍️",
-            "Dê uma caminhada ao sol ☀️",
-            "Ligue para um amigo e compartilhe sua alegria ☎️",
-            "Experimente cozinhar algo divertido 🍳",
-            "Faça um ato de bondade ❤️",
-            "Desenhe ou pinte algo colorido 🎨",
-            "Tire um momento para meditar 🧘‍♂️",
-            "Assista a um filme de comédia 🍿",
-            "Jogue algo que faça você rir 🎮"
-          ],
-          sad: [
-            "Tome um banho quente 🛁",
-            "Ouça uma playlist calma 🎶",
-            "Escreva seus sentimentos em um diário 📝",
-            "Saia para caminhar e respire ar fresco 🌳",
-            "Ligue para alguém de confiança ☎️",
-            "Assista a um filme que te faça bem 🎬",
-            "Faça alongamentos leves 🧘‍♀️",
-            "Beba um chá reconfortante ☕",
-            "Abrace seu pet 🐾",
-            "Desenhe ou rabisque suas emoções 🎨"
-          ],
-          angry: [
-            "Faça um treino rápido 💪",
-            "Ouça música relaxante 🎧",
-            "Pratique respiração profunda 🌬️",
-            "Escreva o que está te irritando 🖊️",
-            "Dê uma caminhada curta 🚶‍♂️",
-            "Grite em um travesseiro 😤",
-            "Experimente meditação 🧘‍♂️",
-            "Use uma bola anti-stress 🥊",
-            "Alongue seus músculos 🧘‍♀️",
-            "Ouça sons relaxantes 🌧️"
-          ],
-          lonely: [
-            "Ligue ou mande mensagem para um amigo ☎️",
-            "Participe de uma comunidade online 💻",
-            "Assista a um filme que te faça sorrir 🍿",
-            "Passe tempo com animais 🐶",
-            "Escreva cartas para alguém que você gosta ✍️",
-            "Caminhe em um parque e observe as pessoas 🌳",
-            "Experimente um hobby online 🎨",
-            "Convide alguém para um chat de vídeo 🎥",
-            "Comece um projeto criativo sozinho 🎸",
-            "Pratique cuidados pessoais 🛀"
-          ],
-          anxious: [
-            "Tente uma meditação de 5 minutos 🧘‍♂️",
-            "Escreva o que está te preocupando 🖊️",
-            "Saia e respire profundamente 🌳",
-            "Ouça música calma 🎧",
-            "Faça alongamentos leves 🧘‍♀️",
-            "Beba água devagar 💧",
-            "Caminhe observando o entorno 🚶‍♂️",
-            "Visualize um lugar tranquilo 🏞️",
-            "Escreva afirmações positivas ✨",
-            "Evite notícias estressantes 📰"
-          ],
-          bored: [
-            "Experimente um hobby novo 🎨",
-            "Aprenda algo online 📚",
-            "Jogue um mini-game divertido 🎮",
-            "Ouça um podcast interessante 🎧",
-            "Reorganize seu quarto 🛋️",
-            "Desenhe livremente ✍️",
-            "Cozinhe uma nova receita 🍳",
-            "Tire fotos criativas 📸",
-            "Escreva um conto ou poema 📝",
-            "Pratique uma habilidade nova 🎸"
-          ],
-          stressed: [
-            "Dê uma caminhada curta 🚶‍♂️",
-            "Ouça música relaxante 🎵",
-            "Alongue-se levemente 🧘‍♀️",
-            "Escreva o que está te estressando 📝",
-            "Pratique respiração profunda 🌬️",
-            "Beba chá de ervas ☕",
-            "Tente relaxamento muscular 💆‍♂️",
-            "Tire um cochilo rápido 😴",
-            "Organize seu espaço 🧹",
-            "Foque em uma tarefa de cada vez 🎯"
-          ]
-        }
+      if (step.advice) {
+        quizContainer.innerHTML = `<h1 class="text-3xl mb-6">Advice for you:</h1>
+                                   <p class="text-xl">${step.advice}</p>`;
+        return;
       }
-    };
 
-    const moodColors = {
-      happy: "linear-gradient(135deg, #fff89a, #ffe066)",
-      sad: "linear-gradient(135deg, #6c5ce7, #a29bfe)",
-      angry: "linear-gradient(135deg, #e74c3c, #ff7675)",
-      lonely: "linear-gradient(135deg, #3498db, #74b9ff)",
-      anxious: "linear-gradient(135deg, #1abc9c, #55efc4)",
-      bored: "linear-gradient(135deg, #f39c12, #fdcb6e)",
-      stressed: "linear-gradient(135deg, #8e44ad, #a29bfe)"
-    };
+      quizContainer.innerHTML = `<h1 class="text-3xl mb-6">${step.question}</h1><div id="options"></div>`;
+      const newOptionsDiv = document.getElementById("options");
 
-    let currentMood = null;
-    let tips = [];
-    let currentTipIndex = 0;
+      step.options.forEach(opt => {
+        const btn = document.createElement("div");
+        btn.className = "option";
+        btn.innerText = opt.text;
+        btn.onclick = () => showStep(quizData[opt.next]);
+        newOptionsDiv.appendChild(btn);
+      });
+    }, 400);
+  }
 
-    function startMood(mood) {
-      currentMood = mood;
-      tips = translations[lang].tips[mood];
-      currentTipIndex = 0;
-
-      const buttonsDiv = document.getElementById("mood-buttons");
-      const mainImg = document.getElementById("main-img");
-
-      buttonsDiv.classList.add("fade-out");
-      mainImg.classList.add("fade-out");
-      document.body.style.background = moodColors[mood];
-
-      setTimeout(() => {
-        buttonsDiv.style.display = "none";
-        mainImg.style.display = "none";
-
-        const msgDiv = document.getElementById("mood-message");
-        msgDiv.innerText = translations[lang].messages[mood];
-        msgDiv.classList.add("fade-in");
-
-        showTip(currentTipIndex);
-        document.getElementById("suggestions").classList.add("fade-in");
-        document.getElementById("nav-buttons").classList.add("fade-in");
-
-        document.getElementById("back-btn").innerText = translations[lang].buttons.back;
-        document.getElementById("done-btn").innerText = translations[lang].buttons.done;
-      }, 1000);
-    }
-
-    function showTip(index) {
-      const suggestionsDiv = document.getElementById("suggestions");
-      suggestionsDiv.innerHTML = `<h2 class="text-3xl font-bold mb-6">Suggestion ${index + 1} of ${tips.length}</h2>
-                                  <p class="text-2xl">${tips[index]}</p>`;
-    }
-
-    function nextTip() {
-      if (currentTipIndex < tips.length - 1) {
-        currentTipIndex++;
-        showTip(currentTipIndex);
-      }
-    }
-
-    function prevTip() {
-      if (currentTipIndex > 0) {
-        currentTipIndex--;
-        showTip(currentTipIndex);
-      }
-    }
-  </script>
+  // Inicializa o quiz
+  showStep(quizData.start);
+</script>
 
 </body>
 </html>
