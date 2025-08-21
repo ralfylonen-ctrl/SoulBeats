@@ -28,8 +28,11 @@
       to { opacity: 0; }
     }
     @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    body {
+      transition: background 1.5s ease;
     }
   </style>
 </head>
@@ -37,7 +40,7 @@
 
   <!-- Imagem principal -->
   <div id="main-img" class="w-full max-w-4xl h-80 bg-center bg-cover rounded-xl mb-8"
-       style='background-image: url("mainimg.png");'>
+       style='background-image: url("img.png");'>
   </div>
 
   <!-- Botões de Mood -->
@@ -50,6 +53,9 @@
     <button class="rainbow-hover px-6 py-3 rounded-full font-bold text-lg bg-[#233148] transition-all duration-300" onclick="startMood('bored')">Bored</button>
     <button class="rainbow-hover px-6 py-3 rounded-full font-bold text-lg bg-[#233148] transition-all duration-300" onclick="startMood('stressed')">Stressed</button>
   </div>
+
+  <!-- Mensagem motivacional -->
+  <div id="mood-message" class="text-3xl font-extrabold text-center mb-6 opacity-0"></div>
 
   <!-- Área de Sugestões -->
   <div id="suggestions" class="max-w-2xl text-center text-lg opacity-0"></div>
@@ -148,6 +154,26 @@
       ]
     };
 
+    const moodMessages = {
+      happy: "Awesome! Feeling Happy is a great start to brighten your day 🌞",
+      sad: "It’s okay to feel Sad. Let’s take small steps to feel better 🌧️",
+      angry: "Feeling Angry is natural. Let’s release it safely 💥",
+      lonely: "Being Lonely is normal. Let’s find ways to connect 🤝",
+      anxious: "Feeling Anxious is okay. Let’s calm your mind 🌿",
+      bored: "Boredom can be fun! Let’s explore something new 🎨",
+      stressed: "Feeling Stressed? Let’s relax and take control 🧘‍♂️"
+    };
+
+    const moodColors = {
+      happy: "#f9d423",
+      sad: "#6c5ce7",
+      angry: "#e74c3c",
+      lonely: "#3498db",
+      anxious: "#1abc9c",
+      bored: "#f39c12",
+      stressed: "#8e44ad"
+    };
+
     let currentMood = null;
     let tips = [];
     let currentTipIndex = 0;
@@ -164,13 +190,23 @@
       buttonsDiv.classList.add("fade-out");
       mainImg.classList.add("fade-out");
 
+      // Mudar cor do fundo
+      document.body.style.background = moodColors[mood];
+
       setTimeout(() => {
         buttonsDiv.style.display = "none";
         mainImg.style.display = "none";
+
+        // Mostrar mensagem motivacional
+        const msgDiv = document.getElementById("mood-message");
+        msgDiv.innerText = moodMessages[mood];
+        msgDiv.classList.add("fade-in");
+
+        // Mostrar primeira dica com delay
         showTip(currentTipIndex);
         document.getElementById("suggestions").classList.add("fade-in");
         document.getElementById("nav-buttons").classList.add("fade-in");
-      }, 1000); // 1s de fade out
+      }, 1000); // 1s fade out
     }
 
     function showTip(index) {
