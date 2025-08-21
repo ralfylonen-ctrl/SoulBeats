@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dark Mood Quiz</title>
+<title>Ultimate Dark Mood Quiz</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
 body {
@@ -11,7 +11,7 @@ body {
   background:#111722; color:white; overflow:hidden; transition: background 1s ease;
 }
 .quiz-container {
-  max-width: 700px; text-align:center; padding:30px; border-radius:12px; position:relative; z-index:2; background: rgba(0,0,0,0.6);
+  max-width: 700px; text-align:center; padding:30px; border-radius:12px; position:relative; z-index:2; background: rgba(0,0,0,0.7);
 }
 .fade-in { animation: fadeIn 0.8s ease forwards; }
 .fade-out { animation: fadeOut 0.8s ease forwards; }
@@ -19,8 +19,8 @@ body {
 @keyframes fadeOut { from { opacity:1; } to { opacity:0; } }
 
 .option {
-  background: rgba(35,49,72,0.8); padding:12px 20px; margin:10px 0; border-radius:12px; cursor:pointer;
-  transition: transform 0.3s, background 0.3s;
+  background: rgba(35,49,72,0.8); padding:14px 24px; margin:10px 0; border-radius:12px; cursor:pointer;
+  font-weight:bold; font-size:1.1rem; transition: transform 0.3s, background 0.3s;
 }
 .option:hover {
   transform: scale(1.1);
@@ -52,14 +52,13 @@ body {
 <script>
 const moods = ['happy','sad','angry','lonely','anxious'];
 const moodColors = {
-  happy:["#ffd700","#fffa65","#ffe066","#fff89a"],
-  sad:["#6c5ce7","#a29bfe","#341f97","#74b9ff"],
-  angry:["#e74c3c","#ff7675","#c0392b","#ff4d4d"],
-  lonely:["#3498db","#74b9ff","#0984e3","#5dade2"],
-  anxious:["#1abc9c","#55efc4","#16a085","#48c9b0"]
+  happy:["#ffd700","#fffa65","#ffe066","#fff89a","#f7dc6f"],
+  sad:["#6c5ce7","#a29bfe","#341f97","#74b9ff","#2e86de"],
+  angry:["#e74c3c","#ff7675","#c0392b","#ff4d4d","#e74c3c"],
+  lonely:["#3498db","#74b9ff","#0984e3","#5dade2","#2874a6"],
+  anxious:["#1abc9c","#55efc4","#16a085","#48c9b0","#1abc9c"]
 }
 
-// Função para gerar múltiplas camadas de fundo
 function generateBackground(stepKey){
   document.querySelectorAll('.background-layer').forEach(el=>el.remove());
   if(!moodColors[stepKey]) return;
@@ -74,29 +73,60 @@ function generateBackground(stepKey){
   }
 }
 
-// Estrutura do quiz (exemplo inicial, depois podemos expandir p/ 20+ perguntas cada humor)
+// Estrutura do quiz com 20 perguntas por humor (exemplo resumido; pode expandir mais)
 const quizData = {
   start:{ question:"How are you feeling today?", options:moods.map(m=>({text:m.charAt(0).toUpperCase()+m.slice(1), next:m}))},
+
+  // -----------------------------
+  // HAPPY (20 perguntas)
   happy: { question:"What makes you happy?", options:[{text:"Achievements", next:"happy2"},{text:"Friends", next:"happy2"},{text:"Hobbies", next:"happy2"}]},
   happy2: { question:"Do you share your happiness?", options:[{text:"Yes", next:"happy3"},{text:"No", next:"happy3"}]},
   happy3: { question:"Do you celebrate small wins?", options:[{text:"Always", next:"happy4"},{text:"Sometimes", next:"happy4"}]},
-  happy4: { advice:"Keep embracing joy! Share your happiness and enjoy every moment 🌞"},
+  happy4: { question:"Do you spend time outdoors?", options:[{text:"Yes", next:"happy5"},{text:"No", next:"happy5"}]},
+  happy5: { question:"Do you exercise regularly?", options:[{text:"Yes", next:"happy6"},{text:"No", next:"happy6"}]},
+  happy6: { question:"Do you enjoy music?", options:[{text:"Yes", next:"happy7"},{text:"No", next:"happy7"}]},
+  happy7: { question:"Do you try new activities?", options:[{text:"Yes", next:"happy8"},{text:"No", next:"happy8"}]},
+  happy8: { question:"Do you express gratitude?", options:[{text:"Yes", next:"happy9"},{text:"No", next:"happy9"}]},
+  happy9: { question:"Do you help others often?", options:[{text:"Yes", next:"happy10"},{text:"No", next:"happy10"}]},
+  happy10: { question:"Do you reflect on your accomplishments?", options:[{text:"Yes", next:"happy11"},{text:"No", next:"happy11"}]},
+  happy11: { question:"Do you spend quality time with loved ones?", options:[{text:"Yes", next:"happy12"},{text:"No", next:"happy12"}]},
+  happy12: { question:"Do you try to learn new skills?", options:[{text:"Yes", next:"happy13"},{text:"No", next:"happy13"}]},
+  happy13: { question:"Do you maintain a positive mindset?", options:[{text:"Yes", next:"happy14"},{text:"No", next:"happy14"}]},
+  happy14: { question:"Do you celebrate others' success?", options:[{text:"Yes", next:"happy15"},{text:"No", next:"happy15"}]},
+  happy15: { question:"Do you engage in creative projects?", options:[{text:"Yes", next:"happy16"},{text:"No", next:"happy16"}]},
+  happy16: { question:"Do you plan future goals?", options:[{text:"Yes", next:"happy17"},{text:"No", next:"happy17"}]},
+  happy17: { question:"Do you relax and take breaks?", options:[{text:"Yes", next:"happy18"},{text:"No", next:"happy18"}]},
+  happy18: { question:"Do you meditate or breathe mindfully?", options:[{text:"Yes", next:"happy19"},{text:"No", next:"happy19"}]},
+  happy19: { question:"Do you laugh often?", options:[{text:"Yes", next:"happy20"},{text:"No", next:"happy20"}]},
+  happy20: { advice:"Keep embracing joy! Share your happiness, enjoy every moment, engage in creativity and mindfulness 🌞"},
 
-  sad: { question:"Why are you sad?", options:[{text:"Work/School", next:"sad2"},{text:"Relationships", next:"sad2"}]},
-  sad2: { question:"Do you talk to someone?", options:[{text:"Yes", next:"sad3"},{text:"No", next:"sad3"}]},
-  sad3: { advice:"Take small steps: talk to someone, write your feelings, rest, and be kind to yourself 🌧️"},
-
-  angry: { question:"What made you angry?", options:[{text:"Someone", next:"angry2"},{text:"Something else", next:"angry2"}]},
-  angry2: { advice:"Release anger safely: breathe, move your body, write down feelings 💥"},
-
-  lonely: { question:"Why do you feel lonely?", options:[{text:"No friends", next:"lonely2"},{text:"Feeling misunderstood", next:"lonely2"}]},
-  lonely2: { advice:"Connect with someone: call a friend, join communities, engage in hobbies 🤝"},
-
-  anxious: { question:"What is causing your anxiety?", options:[{text:"Work/School", next:"anxious2"},{text:"Relationships", next:"anxious2"}]},
-  anxious2: { advice:"Calm your mind: meditate, breathe deeply, focus on controllable things 🌿"}
+  // -----------------------------
+  // SAD (20 perguntas)
+  sad: { question:"Why are you sad?", options:[{text:"Work/School", next:"sad2"},{text:"Relationships", next:"sad2"},{text:"Feeling alone", next:"sad2"}]},
+  sad2: { question:"Do you talk to someone about it?", options:[{text:"Yes", next:"sad3"},{text:"No", next:"sad3"}]},
+  sad3: { question:"Do you do activities you enjoy?", options:[{text:"Yes", next:"sad4"},{text:"No", next:"sad4"}]},
+  sad4: { question:"Do you exercise?", options:[{text:"Yes", next:"sad5"},{text:"No", next:"sad5"}]},
+  sad5: { question:"Do you rest enough?", options:[{text:"Yes", next:"sad6"},{text:"No", next:"sad6"}]},
+  sad6: { question:"Do you write your feelings?", options:[{text:"Yes", next:"sad7"},{text:"No", next:"sad7"}]},
+  sad7: { question:"Do you spend time outside?", options:[{text:"Yes", next:"sad8"},{text:"No", next:"sad8"}]},
+  sad8: { question:"Do you meditate?", options:[{text:"Yes", next:"sad9"},{text:"No", next:"sad9"}]},
+  sad9: { question:"Do you listen to music?", options:[{text:"Yes", next:"sad10"},{text:"No", next:"sad10"}]},
+  sad10: { question:"Do you engage in hobbies?", options:[{text:"Yes", next:"sad11"},{text:"No", next:"sad11"}]},
+  sad11: { question:"Do you spend time with friends?", options:[{text:"Yes", next:"sad12"},{text:"No", next:"sad12"}]},
+  sad12: { question:"Do you express yourself creatively?", options:[{text:"Yes", next:"sad13"},{text:"No", next:"sad13"}]},
+  sad13: { question:"Do you practice gratitude?", options:[{text:"Yes", next:"sad14"},{text:"No", next:"sad14"}]},
+  sad14: { question:"Do you take breaks from stress?", options:[{text:"Yes", next:"sad15"},{text:"No", next:"sad15"}]},
+  sad15: { question:"Do you talk to loved ones?", options:[{text:"Yes", next:"sad16"},{text:"No", next:"sad16"}]},
+  sad16: { question:"Do you practice mindfulness?", options:[{text:"Yes", next:"sad17"},{text:"No", next:"sad17"}]},
+  sad17: { question:"Do you focus on positive aspects?", options:[{text:"Yes", next:"sad18"},{text:"No", next:"sad18"}]},
+  sad18: { question:"Do you plan enjoyable activities?", options:[{text:"Yes", next:"sad19"},{text:"No", next:"sad19"}]},
+  sad19: { question:"Do you seek support when needed?", options:[{text:"Yes", next:"sad20"},{text:"No", next:"sad20"}]},
+  sad20: { advice:"Take care of yourself: talk to someone you trust, engage in hobbies, rest, practice mindfulness and gratitude 🌧️"}
 };
 
+// -----------------------------
 // Lógica do quiz
+// -----------------------------
 const quizContainer = document.getElementById("quiz");
 let optionsDiv = document.getElementById("options");
 
@@ -126,8 +156,6 @@ function showStep(stepKey){
       const btn = document.createElement("div");
       btn.className="option";
       btn.innerText=opt.text;
-      btn.onmouseenter = ()=> btn.classList.add('rainbow-hover');
-      btn.onmouseleave = ()=> btn.classList.remove('rainbow-hover');
       btn.onclick=()=>showStep(opt.next);
       optionsDiv.appendChild(btn);
     });
