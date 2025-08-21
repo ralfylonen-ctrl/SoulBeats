@@ -55,123 +55,229 @@
   </div>
 
   <!-- Mensagem motivacional -->
-  <div id="mood-message" class="text-3xl font-extrabold text-center mb-6 opacity-0"></div>
+  <div id="mood-message" class="text-4xl font-extrabold text-center mb-8 opacity-0"></div>
 
   <!-- Área de Sugestões -->
-  <div id="suggestions" class="max-w-2xl text-center text-lg opacity-0"></div>
+  <div id="suggestions" class="max-w-3xl text-center text-xl opacity-0"></div>
 
   <!-- Navegação -->
-  <div id="nav-buttons" class="flex gap-8 mt-6 opacity-0">
-    <button class="rainbow-hover px-6 py-3 rounded-full font-bold text-lg bg-[#233148] transition-all duration-300" onclick="prevTip()">← Previous</button>
-    <button class="rainbow-hover px-6 py-3 rounded-full font-bold text-lg bg-[#233148] transition-all duration-300" onclick="nextTip()">Next →</button>
+  <div id="nav-buttons" class="flex gap-8 mt-8 opacity-0">
+    <button id="back-btn" class="rainbow-hover px-6 py-3 rounded-full font-bold text-lg bg-[#233148] transition-all duration-300" onclick="prevTip()">Back</button>
+    <button id="done-btn" class="rainbow-hover px-6 py-3 rounded-full font-bold text-lg bg-[#233148] transition-all duration-300" onclick="nextTip()">Done</button>
   </div>
 
   <script>
-    const moodSuggestions = {
-      happy: [
-        "Dance to your favorite song 🎵",
-        "Write down 3 things you're grateful for ✍️",
-        "Go for a walk in the sun ☀️",
-        "Call a friend and share your joy ☎️",
-        "Try cooking something fun 🍳",
-        "Do a random act of kindness ❤️",
-        "Draw or paint something colorful 🎨",
-        "Take a moment to meditate and breathe deeply 🧘‍♂️",
-        "Watch a comedy movie 🍿",
-        "Play a game that makes you laugh 🎮"
-      ],
-      sad: [
-        "Take a warm bath 🛁",
-        "Listen to a calming playlist 🎶",
-        "Write down your feelings in a journal 📝",
-        "Go for a walk outside and breathe fresh air 🌳",
-        "Call someone you trust and talk ☎️",
-        "Watch a feel-good movie 🎬",
-        "Do some light stretching 🧘‍♀️",
-        "Drink a comforting tea ☕",
-        "Cuddle with a pet 🐾",
-        "Draw or doodle your emotions 🎨"
-      ],
-      angry: [
-        "Do a quick workout to release tension 💪",
-        "Listen to music that relaxes you 🎧",
-        "Practice deep breathing for 5 minutes 🌬️",
-        "Write down what’s making you angry 🖊️",
-        "Take a short walk outside 🚶‍♂️",
-        "Scream into a pillow 😤",
-        "Try meditation or mindfulness 🧘‍♂️",
-        "Punch a stress ball 🥊",
-        "Stretch your muscles 🧘‍♀️",
-        "Listen to soothing sounds like rain 🌧️"
-      ],
-      lonely: [
-        "Call or message a friend ☎️",
-        "Join an online community or forum 💻",
-        "Watch a movie that makes you smile 🍿",
-        "Adopt a pet or spend time with animals 🐶",
-        "Write letters to someone you care about ✍️",
-        "Take a walk in a park and observe people 🌳",
-        "Try a new hobby that connects you online 🎨",
-        "Invite someone to a casual video chat 🎥",
-        "Start a creative project alone but fun 🎸",
-        "Practice self-care routines 🛀"
-      ],
-      anxious: [
-        "Try a 5-minute meditation 🧘‍♂️",
-        "Write down what’s bothering you 🖊️",
-        "Go outside and take deep breaths 🌳",
-        "Listen to calming music 🎧",
-        "Do light stretching exercises 🧘‍♀️",
-        "Drink water slowly 💧",
-        "Take a mindful walk and notice surroundings 🚶‍♂️",
-        "Visualize a peaceful place 🏞️",
-        "Write down positive affirmations ✨",
-        "Limit exposure to stressful news 📰"
-      ],
-      bored: [
-        "Try a new hobby or craft 🎨",
-        "Learn something new online 📚",
-        "Play a fun mini-game online 🎮",
-        "Listen to a podcast about an interesting topic 🎧",
-        "Rearrange your room 🛋️",
-        "Draw or doodle freely ✍️",
-        "Cook a new recipe 🍳",
-        "Take photos creatively 📸",
-        "Write a short story or poem 📝",
-        "Practice a skill you’ve always wanted to improve 🎸"
-      ],
-      stressed: [
-        "Take a short walk outside 🚶‍♂️",
-        "Listen to relaxing music 🎵",
-        "Do some light stretching exercises 🧘‍♀️",
-        "Write down what’s stressing you 📝",
-        "Practice deep breathing 🌬️",
-        "Drink herbal tea ☕",
-        "Try progressive muscle relaxation 💆‍♂️",
-        "Take a short nap 😴",
-        "Organize your desk or space 🧹",
-        "Focus on one task at a time 🎯"
-      ]
-    };
+    // Detectar idioma do navegador
+    const userLang = navigator.language || navigator.userLanguage;
+    const lang = userLang.startsWith('pt') ? 'pt' : 'en';
 
-    const moodMessages = {
-      happy: "Awesome! Feeling Happy is a great start to brighten your day 🌞",
-      sad: "It’s okay to feel Sad. Let’s take small steps to feel better 🌧️",
-      angry: "Feeling Angry is natural. Let’s release it safely 💥",
-      lonely: "Being Lonely is normal. Let’s find ways to connect 🤝",
-      anxious: "Feeling Anxious is okay. Let’s calm your mind 🌿",
-      bored: "Boredom can be fun! Let’s explore something new 🎨",
-      stressed: "Feeling Stressed? Let’s relax and take control 🧘‍♂️"
+    const translations = {
+      en: {
+        messages: {
+          happy: "Awesome! Feeling Happy is a great start to brighten your day 🌞",
+          sad: "It’s okay to feel Sad. Let’s take small steps to feel better 🌧️",
+          angry: "Feeling Angry is natural. Let’s release it safely 💥",
+          lonely: "Being Lonely is normal. Let’s find ways to connect 🤝",
+          anxious: "Feeling Anxious is okay. Let’s calm your mind 🌿",
+          bored: "Boredom can be fun! Let’s explore something new 🎨",
+          stressed: "Feeling Stressed? Let’s relax and take control 🧘‍♂️"
+        },
+        buttons: { back: "Back", done: "Done" },
+        tips: {
+          happy: [
+            "Dance to your favorite song 🎵",
+            "Write down 3 things you're grateful for ✍️",
+            "Go for a walk in the sun ☀️",
+            "Call a friend and share your joy ☎️",
+            "Try cooking something fun 🍳",
+            "Do a random act of kindness ❤️",
+            "Draw or paint something colorful 🎨",
+            "Take a moment to meditate and breathe deeply 🧘‍♂️",
+            "Watch a comedy movie 🍿",
+            "Play a game that makes you laugh 🎮"
+          ],
+          sad: [
+            "Take a warm bath 🛁",
+            "Listen to a calming playlist 🎶",
+            "Write down your feelings in a journal 📝",
+            "Go for a walk outside and breathe fresh air 🌳",
+            "Call someone you trust and talk ☎️",
+            "Watch a feel-good movie 🎬",
+            "Do some light stretching 🧘‍♀️",
+            "Drink a comforting tea ☕",
+            "Cuddle with a pet 🐾",
+            "Draw or doodle your emotions 🎨"
+          ],
+          angry: [
+            "Do a quick workout to release tension 💪",
+            "Listen to music that relaxes you 🎧",
+            "Practice deep breathing for 5 minutes 🌬️",
+            "Write down what’s making you angry 🖊️",
+            "Take a short walk outside 🚶‍♂️",
+            "Scream into a pillow 😤",
+            "Try meditation or mindfulness 🧘‍♂️",
+            "Punch a stress ball 🥊",
+            "Stretch your muscles 🧘‍♀️",
+            "Listen to soothing sounds like rain 🌧️"
+          ],
+          lonely: [
+            "Call or message a friend ☎️",
+            "Join an online community or forum 💻",
+            "Watch a movie that makes you smile 🍿",
+            "Adopt a pet or spend time with animals 🐶",
+            "Write letters to someone you care about ✍️",
+            "Take a walk in a park and observe people 🌳",
+            "Try a new hobby that connects you online 🎨",
+            "Invite someone to a casual video chat 🎥",
+            "Start a creative project alone but fun 🎸",
+            "Practice self-care routines 🛀"
+          ],
+          anxious: [
+            "Try a 5-minute meditation 🧘‍♂️",
+            "Write down what’s bothering you 🖊️",
+            "Go outside and take deep breaths 🌳",
+            "Listen to calming music 🎧",
+            "Do light stretching exercises 🧘‍♀️",
+            "Drink water slowly 💧",
+            "Take a mindful walk and notice surroundings 🚶‍♂️",
+            "Visualize a peaceful place 🏞️",
+            "Write down positive affirmations ✨",
+            "Limit exposure to stressful news 📰"
+          ],
+          bored: [
+            "Try a new hobby or craft 🎨",
+            "Learn something new online 📚",
+            "Play a fun mini-game online 🎮",
+            "Listen to a podcast about an interesting topic 🎧",
+            "Rearrange your room 🛋️",
+            "Draw or doodle freely ✍️",
+            "Cook a new recipe 🍳",
+            "Take photos creatively 📸",
+            "Write a short story or poem 📝",
+            "Practice a skill you’ve always wanted to improve 🎸"
+          ],
+          stressed: [
+            "Take a short walk outside 🚶‍♂️",
+            "Listen to relaxing music 🎵",
+            "Do some light stretching exercises 🧘‍♀️",
+            "Write down what’s stressing you 📝",
+            "Practice deep breathing 🌬️",
+            "Drink herbal tea ☕",
+            "Try progressive muscle relaxation 💆‍♂️",
+            "Take a short nap 😴",
+            "Organize your desk or space 🧹",
+            "Focus on one task at a time 🎯"
+          ]
+        }
+      },
+      pt: {
+        messages: {
+          happy: "Incrível! Sentir-se feliz é um ótimo começo para iluminar seu dia 🌞",
+          sad: "Tudo bem sentir-se triste. Vamos dar pequenos passos para se sentir melhor 🌧️",
+          angry: "Sentir raiva é natural. Vamos liberar de forma segura 💥",
+          lonely: "Sentir-se sozinho é normal. Vamos encontrar formas de se conectar 🤝",
+          anxious: "Sentir ansiedade é normal. Vamos acalmar sua mente 🌿",
+          bored: "O tédio pode ser divertido! Vamos explorar algo novo 🎨",
+          stressed: "Sentir estresse? Vamos relaxar e retomar o controle 🧘‍♂️"
+        },
+        buttons: { back: "Voltar", done: "Próximo" },
+        tips: {
+          happy: [
+            "Dance sua música favorita 🎵",
+            "Escreva 3 coisas pelas quais você é grato ✍️",
+            "Dê uma caminhada ao sol ☀️",
+            "Ligue para um amigo e compartilhe sua alegria ☎️",
+            "Experimente cozinhar algo divertido 🍳",
+            "Faça um ato de bondade ❤️",
+            "Desenhe ou pinte algo colorido 🎨",
+            "Tire um momento para meditar 🧘‍♂️",
+            "Assista a um filme de comédia 🍿",
+            "Jogue algo que faça você rir 🎮"
+          ],
+          sad: [
+            "Tome um banho quente 🛁",
+            "Ouça uma playlist calma 🎶",
+            "Escreva seus sentimentos em um diário 📝",
+            "Saia para caminhar e respire ar fresco 🌳",
+            "Ligue para alguém de confiança ☎️",
+            "Assista a um filme que te faça bem 🎬",
+            "Faça alongamentos leves 🧘‍♀️",
+            "Beba um chá reconfortante ☕",
+            "Abrace seu pet 🐾",
+            "Desenhe ou rabisque suas emoções 🎨"
+          ],
+          angry: [
+            "Faça um treino rápido 💪",
+            "Ouça música relaxante 🎧",
+            "Pratique respiração profunda 🌬️",
+            "Escreva o que está te irritando 🖊️",
+            "Dê uma caminhada curta 🚶‍♂️",
+            "Grite em um travesseiro 😤",
+            "Experimente meditação 🧘‍♂️",
+            "Use uma bola anti-stress 🥊",
+            "Alongue seus músculos 🧘‍♀️",
+            "Ouça sons relaxantes 🌧️"
+          ],
+          lonely: [
+            "Ligue ou mande mensagem para um amigo ☎️",
+            "Participe de uma comunidade online 💻",
+            "Assista a um filme que te faça sorrir 🍿",
+            "Passe tempo com animais 🐶",
+            "Escreva cartas para alguém que você gosta ✍️",
+            "Caminhe em um parque e observe as pessoas 🌳",
+            "Experimente um hobby online 🎨",
+            "Convide alguém para um chat de vídeo 🎥",
+            "Comece um projeto criativo sozinho 🎸",
+            "Pratique cuidados pessoais 🛀"
+          ],
+          anxious: [
+            "Tente uma meditação de 5 minutos 🧘‍♂️",
+            "Escreva o que está te preocupando 🖊️",
+            "Saia e respire profundamente 🌳",
+            "Ouça música calma 🎧",
+            "Faça alongamentos leves 🧘‍♀️",
+            "Beba água devagar 💧",
+            "Caminhe observando o entorno 🚶‍♂️",
+            "Visualize um lugar tranquilo 🏞️",
+            "Escreva afirmações positivas ✨",
+            "Evite notícias estressantes 📰"
+          ],
+          bored: [
+            "Experimente um hobby novo 🎨",
+            "Aprenda algo online 📚",
+            "Jogue um mini-game divertido 🎮",
+            "Ouça um podcast interessante 🎧",
+            "Reorganize seu quarto 🛋️",
+            "Desenhe livremente ✍️",
+            "Cozinhe uma nova receita 🍳",
+            "Tire fotos criativas 📸",
+            "Escreva um conto ou poema 📝",
+            "Pratique uma habilidade nova 🎸"
+          ],
+          stressed: [
+            "Dê uma caminhada curta 🚶‍♂️",
+            "Ouça música relaxante 🎵",
+            "Alongue-se levemente 🧘‍♀️",
+            "Escreva o que está te estressando 📝",
+            "Pratique respiração profunda 🌬️",
+            "Beba chá de ervas ☕",
+            "Tente relaxamento muscular 💆‍♂️",
+            "Tire um cochilo rápido 😴",
+            "Organize seu espaço 🧹",
+            "Foque em uma tarefa de cada vez 🎯"
+          ]
+        }
+      }
     };
 
     const moodColors = {
-      happy: "#f9d423",
-      sad: "#6c5ce7",
-      angry: "#e74c3c",
-      lonely: "#3498db",
-      anxious: "#1abc9c",
-      bored: "#f39c12",
-      stressed: "#8e44ad"
+      happy: "linear-gradient(135deg, #fff89a, #ffe066)",
+      sad: "linear-gradient(135deg, #6c5ce7, #a29bfe)",
+      angry: "linear-gradient(135deg, #e74c3c, #ff7675)",
+      lonely: "linear-gradient(135deg, #3498db, #74b9ff)",
+      anxious: "linear-gradient(135deg, #1abc9c, #55efc4)",
+      bored: "linear-gradient(135deg, #f39c12, #fdcb6e)",
+      stressed: "linear-gradient(135deg, #8e44ad, #a29bfe)"
     };
 
     let currentMood = null;
@@ -180,39 +286,37 @@
 
     function startMood(mood) {
       currentMood = mood;
-      tips = moodSuggestions[mood];
+      tips = translations[lang].tips[mood];
       currentTipIndex = 0;
 
       const buttonsDiv = document.getElementById("mood-buttons");
       const mainImg = document.getElementById("main-img");
 
-      // Fade out inicial
       buttonsDiv.classList.add("fade-out");
       mainImg.classList.add("fade-out");
-
-      // Mudar cor do fundo
       document.body.style.background = moodColors[mood];
 
       setTimeout(() => {
         buttonsDiv.style.display = "none";
         mainImg.style.display = "none";
 
-        // Mostrar mensagem motivacional
         const msgDiv = document.getElementById("mood-message");
-        msgDiv.innerText = moodMessages[mood];
+        msgDiv.innerText = translations[lang].messages[mood];
         msgDiv.classList.add("fade-in");
 
-        // Mostrar primeira dica com delay
         showTip(currentTipIndex);
         document.getElementById("suggestions").classList.add("fade-in");
         document.getElementById("nav-buttons").classList.add("fade-in");
-      }, 1000); // 1s fade out
+
+        document.getElementById("back-btn").innerText = translations[lang].buttons.back;
+        document.getElementById("done-btn").innerText = translations[lang].buttons.done;
+      }, 1000);
     }
 
     function showTip(index) {
       const suggestionsDiv = document.getElementById("suggestions");
-      suggestionsDiv.innerHTML = `<h2 class="text-2xl font-bold mb-4">Suggestion ${index + 1} of ${tips.length}</h2>
-                                  <p class="text-lg">${tips[index]}</p>`;
+      suggestionsDiv.innerHTML = `<h2 class="text-3xl font-bold mb-6">Suggestion ${index + 1} of ${tips.length}</h2>
+                                  <p class="text-2xl">${tips[index]}</p>`;
     }
 
     function nextTip() {
