@@ -7,7 +7,6 @@
   <link rel="icon" type="image/png" href="fav.png" />
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* Animação arco-íris */
     @keyframes rainbow {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
@@ -19,77 +18,179 @@
       animation: rainbow 5s ease infinite;
       transform: scale(1.1);
     }
+    .fade-out {
+      animation: fadeOut 1s forwards;
+    }
+    .fade-in {
+      animation: fadeIn 1s forwards;
+    }
+    @keyframes fadeOut {
+      to { opacity: 0; }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
   </style>
 </head>
 <body class="bg-[#111722] text-white min-h-screen flex flex-col justify-center items-center">
 
   <!-- Imagem principal -->
-  <div class="w-full max-w-4xl h-80 bg-center bg-cover rounded-xl mb-8"
+  <div id="main-img" class="w-full max-w-4xl h-80 bg-center bg-cover rounded-xl mb-8"
        style='background-image: url("mainimg.png");'>
   </div>
 
   <!-- Botões de Mood -->
-  <div class="flex flex-wrap gap-4 justify-center mb-8">
-    <button class="rainbow-hover px-6 py-3 rounded-full font-bold text-lg bg-[#233148] transition-all duration-300" onclick="showSuggestions('happy')">Happy</button>
-    <button class="rainbow-hover px-6 py-3 rounded-full font-bold text-lg bg-[#233148] transition-all duration-300" onclick="showSuggestions('sad')">Sad</button>
-    <button class="rainbow-hover px-6 py-3 rounded-full font-bold text-lg bg-[#233148] transition-all duration-300" onclick="showSuggestions('angry')">Angry</button>
-    <button class="rainbow-hover px-6 py-3 rounded-full font-bold text-lg bg-[#233148] transition-all duration-300" onclick="showSuggestions('lonely')">Lonely</button>
-    <button class="rainbow-hover px-6 py-3 rounded-full font-bold text-lg bg-[#233148] transition-all duration-300" onclick="showSuggestions('anxious')">Anxious</button>
-    <button class="rainbow-hover px-6 py-3 rounded-full font-bold text-lg bg-[#233148] transition-all duration-300" onclick="showSuggestions('bored')">Bored</button>
-    <button class="rainbow-hover px-6 py-3 rounded-full font-bold text-lg bg-[#233148] transition-all duration-300" onclick="showSuggestions('stressed')">Stressed</button>
+  <div id="mood-buttons" class="flex flex-wrap gap-4 justify-center mb-8">
+    <button class="rainbow-hover px-6 py-3 rounded-full font-bold text-lg bg-[#233148] transition-all duration-300" onclick="startMood('happy')">Happy</button>
+    <button class="rainbow-hover px-6 py-3 rounded-full font-bold text-lg bg-[#233148] transition-all duration-300" onclick="startMood('sad')">Sad</button>
+    <button class="rainbow-hover px-6 py-3 rounded-full font-bold text-lg bg-[#233148] transition-all duration-300" onclick="startMood('angry')">Angry</button>
+    <button class="rainbow-hover px-6 py-3 rounded-full font-bold text-lg bg-[#233148] transition-all duration-300" onclick="startMood('lonely')">Lonely</button>
+    <button class="rainbow-hover px-6 py-3 rounded-full font-bold text-lg bg-[#233148] transition-all duration-300" onclick="startMood('anxious')">Anxious</button>
+    <button class="rainbow-hover px-6 py-3 rounded-full font-bold text-lg bg-[#233148] transition-all duration-300" onclick="startMood('bored')">Bored</button>
+    <button class="rainbow-hover px-6 py-3 rounded-full font-bold text-lg bg-[#233148] transition-all duration-300" onclick="startMood('stressed')">Stressed</button>
   </div>
 
   <!-- Área de Sugestões -->
-  <div id="suggestions" class="max-w-2xl text-center text-lg"></div>
+  <div id="suggestions" class="max-w-2xl text-center text-lg opacity-0"></div>
+
+  <!-- Navegação -->
+  <div id="nav-buttons" class="flex gap-8 mt-6 opacity-0">
+    <button class="rainbow-hover px-6 py-3 rounded-full font-bold text-lg bg-[#233148] transition-all duration-300" onclick="prevTip()">← Previous</button>
+    <button class="rainbow-hover px-6 py-3 rounded-full font-bold text-lg bg-[#233148] transition-all duration-300" onclick="nextTip()">Next →</button>
+  </div>
 
   <script>
     const moodSuggestions = {
       happy: [
         "Dance to your favorite song 🎵",
         "Write down 3 things you're grateful for ✍️",
-        "Go for a walk in the sun ☀️"
+        "Go for a walk in the sun ☀️",
+        "Call a friend and share your joy ☎️",
+        "Try cooking something fun 🍳",
+        "Do a random act of kindness ❤️",
+        "Draw or paint something colorful 🎨",
+        "Take a moment to meditate and breathe deeply 🧘‍♂️",
+        "Watch a comedy movie 🍿",
+        "Play a game that makes you laugh 🎮"
       ],
       sad: [
         "Take a warm bath 🛁",
         "Listen to a calming playlist 🎶",
-        "Write down your feelings in a journal 📝"
+        "Write down your feelings in a journal 📝",
+        "Go for a walk outside and breathe fresh air 🌳",
+        "Call someone you trust and talk ☎️",
+        "Watch a feel-good movie 🎬",
+        "Do some light stretching 🧘‍♀️",
+        "Drink a comforting tea ☕",
+        "Cuddle with a pet 🐾",
+        "Draw or doodle your emotions 🎨"
       ],
       angry: [
         "Do a quick workout to release tension 💪",
         "Listen to music that relaxes you 🎧",
-        "Practice deep breathing for 5 minutes 🌬️"
+        "Practice deep breathing for 5 minutes 🌬️",
+        "Write down what’s making you angry 🖊️",
+        "Take a short walk outside 🚶‍♂️",
+        "Scream into a pillow 😤",
+        "Try meditation or mindfulness 🧘‍♂️",
+        "Punch a stress ball 🥊",
+        "Stretch your muscles 🧘‍♀️",
+        "Listen to soothing sounds like rain 🌧️"
       ],
       lonely: [
         "Call or message a friend ☎️",
         "Join an online community or forum 💻",
-        "Watch a movie that makes you smile 🍿"
+        "Watch a movie that makes you smile 🍿",
+        "Adopt a pet or spend time with animals 🐶",
+        "Write letters to someone you care about ✍️",
+        "Take a walk in a park and observe people 🌳",
+        "Try a new hobby that connects you online 🎨",
+        "Invite someone to a casual video chat 🎥",
+        "Start a creative project alone but fun 🎸",
+        "Practice self-care routines 🛀"
       ],
       anxious: [
         "Try a 5-minute meditation 🧘‍♂️",
         "Write down what’s bothering you 🖊️",
-        "Go outside and take deep breaths 🌳"
+        "Go outside and take deep breaths 🌳",
+        "Listen to calming music 🎧",
+        "Do light stretching exercises 🧘‍♀️",
+        "Drink water slowly 💧",
+        "Take a mindful walk and notice surroundings 🚶‍♂️",
+        "Visualize a peaceful place 🏞️",
+        "Write down positive affirmations ✨",
+        "Limit exposure to stressful news 📰"
       ],
       bored: [
         "Try a new hobby or craft 🎨",
         "Learn something new online 📚",
-        "Play a fun mini-game online 🎮"
+        "Play a fun mini-game online 🎮",
+        "Listen to a podcast about an interesting topic 🎧",
+        "Rearrange your room 🛋️",
+        "Draw or doodle freely ✍️",
+        "Cook a new recipe 🍳",
+        "Take photos creatively 📸",
+        "Write a short story or poem 📝",
+        "Practice a skill you’ve always wanted to improve 🎸"
       ],
       stressed: [
         "Take a short walk outside 🚶‍♂️",
         "Listen to relaxing music 🎵",
-        "Do some light stretching exercises 🧘‍♀️"
+        "Do some light stretching exercises 🧘‍♀️",
+        "Write down what’s stressing you 📝",
+        "Practice deep breathing 🌬️",
+        "Drink herbal tea ☕",
+        "Try progressive muscle relaxation 💆‍♂️",
+        "Take a short nap 😴",
+        "Organize your desk or space 🧹",
+        "Focus on one task at a time 🎯"
       ]
     };
 
-    function showSuggestions(mood) {
+    let currentMood = null;
+    let tips = [];
+    let currentTipIndex = 0;
+
+    function startMood(mood) {
+      currentMood = mood;
+      tips = moodSuggestions[mood];
+      currentTipIndex = 0;
+
+      const buttonsDiv = document.getElementById("mood-buttons");
+      const mainImg = document.getElementById("main-img");
+
+      // Fade out inicial
+      buttonsDiv.classList.add("fade-out");
+      mainImg.classList.add("fade-out");
+
+      setTimeout(() => {
+        buttonsDiv.style.display = "none";
+        mainImg.style.display = "none";
+        showTip(currentTipIndex);
+        document.getElementById("suggestions").classList.add("fade-in");
+        document.getElementById("nav-buttons").classList.add("fade-in");
+      }, 1000); // 1s de fade out
+    }
+
+    function showTip(index) {
       const suggestionsDiv = document.getElementById("suggestions");
-      const suggestions = moodSuggestions[mood] || ["Take a break and breathe!"];
-      suggestionsDiv.innerHTML = `<h2 class="text-2xl font-bold mb-4">Suggestions for feeling ${mood.charAt(0).toUpperCase() + mood.slice(1)}</h2>
-                                  <ul class="list-disc list-inside space-y-2">
-                                    ${suggestions.map(item => `<li>${item}</li>`).join('')}
-                                  </ul>`;
-      // Scroll suave até as sugestões
-      suggestionsDiv.scrollIntoView({ behavior: 'smooth' });
+      suggestionsDiv.innerHTML = `<h2 class="text-2xl font-bold mb-4">Suggestion ${index + 1} of ${tips.length}</h2>
+                                  <p class="text-lg">${tips[index]}</p>`;
+    }
+
+    function nextTip() {
+      if (currentTipIndex < tips.length - 1) {
+        currentTipIndex++;
+        showTip(currentTipIndex);
+      }
+    }
+
+    function prevTip() {
+      if (currentTipIndex > 0) {
+        currentTipIndex--;
+        showTip(currentTipIndex);
+      }
     }
   </script>
 
