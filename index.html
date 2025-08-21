@@ -1,48 +1,62 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SoulBeats</title>
-  <link rel="icon" type="image/png" href="fav.png">
-  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
-</head>
-<body class="bg-gradient-to-br from-purple-100 via-pink-100 to-yellow-100 font-sans min-h-screen flex flex-col items-center justify-center p-6">
+<html>
+  <head>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link
+      rel="stylesheet"
+      as="style"
+      onload="this.rel='stylesheet'"
+      href="https://fonts.googleapis.com/css2?display=swap&amp;family=Epilogue%3Awght%40400%3B500%3B700%3B900&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900"
+    />
 
-  <!-- Imagem principal -->
-<img src="mainimg.png" alt="SoulBeats"
-     class="w-full max-w-3xl aspect-[16/7] object-cover rounded-lg shadow-lg mb-6">
+    <title>Stitch Design</title>
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
 
-
-  <!-- Pergunta principal -->
-  <h1 class="text-3xl font-bold text-gray-800 mb-8">How’s your mood today?</h1>
-
-  <!-- Opções de humor -->
-  <div class="grid grid-cols-2 gap-6 w-full max-w-md">
-    <!-- Bravo -->
-    <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center hover:scale-105 transition cursor-pointer">
-      <span class="text-4xl mb-2">😡</span>
-      <p class="text-lg font-semibold text-gray-700">Angry</p>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  </head>
+  <body>
+    <div class="relative flex size-full min-h-screen flex-col bg-[#111722] dark group/design-root overflow-x-hidden" style='font-family: Epilogue, "Noto Sans", sans-serif;'>
+      <div class="layout-container flex h-full grow flex-col">
+        <div class="px-40 flex flex-1 justify-center py-5">
+          <div class="layout-content-container flex flex-col max-w-[960px] flex-1">
+            <div class="@container">
+              <div class="@[480px]:px-4 @[480px]:py-3">
+                <div
+                  class="w-full bg-center bg-no-repeat bg-cover flex flex-col justify-end overflow-hidden bg-[#111722] @[480px]:rounded-xl min-h-80"
+                  style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBjRkVGnxcYAuLQE7I5ry3AIb6s2WcGfDqPWhxfst-5zwJzYJGK4Oe2QusIEzIQHgn6poMtJcKSfAcWh_SZ4xzbVUKnBuQK4ucRnpqh69UwwPS8b4jrw4Rg2dqHnU9VRmXYiZGkRbIAJ9beptmmGYoDL4mTZthnq2xqdyPaErhNzK52y2losT1v5_45inGbTa-PFrQ15ZlpLPsCIB8NbxucBX56tZzUDKLr4F4BJDa3sczqvQatzzllz6BDlaY16WwbYM3kt-215tH_");'
+                ></div>
+              </div>
+            </div>
+            <div class="flex justify-center">
+              <div class="flex flex-1 gap-3 flex-wrap px-4 py-3 max-w-[480px] justify-center">
+                <button
+                  class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-12 px-5 bg-[#2b76ee] text-white text-base font-bold leading-normal tracking-[0.015em] grow"
+                >
+                  <span class="truncate">Happy</span>
+                </button>
+                <button
+                  class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-12 px-5 bg-[#233148] text-white text-base font-bold leading-normal tracking-[0.015em] grow"
+                >
+                  <span class="truncate">Sad</span>
+                </button>
+              </div>
+            </div>
+            <div class="flex justify-center">
+              <div class="flex flex-1 gap-3 flex-wrap px-4 py-3 max-w-[480px] justify-center">
+                <button
+                  class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-12 px-5 bg-[#233148] text-white text-base font-bold leading-normal tracking-[0.015em] grow"
+                >
+                  <span class="truncate">Angry</span>
+                </button>
+                <button
+                  class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-12 px-5 bg-[#233148] text-white text-base font-bold leading-normal tracking-[0.015em] grow"
+                >
+                  <span class="truncate">Lonely</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <!-- Triste -->
-    <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center hover:scale-105 transition cursor-pointer">
-      <span class="text-4xl mb-2">😢</span>
-      <p class="text-lg font-semibold text-gray-700">Sad</p>
-    </div>
-
-    <!-- Sozinho -->
-    <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center hover:scale-105 transition cursor-pointer">
-      <span class="text-4xl mb-2">😔</span>
-      <p class="text-lg font-semibold text-gray-700">Lonely</p>
-    </div>
-
-    <!-- Feliz -->
-    <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center hover:scale-105 transition cursor-pointer">
-      <span class="text-4xl mb-2">😊</span>
-      <p class="text-lg font-semibold text-gray-700">Happy</p>
-    </div>
-  </div>
-
-</body>
+  </body>
 </html>
