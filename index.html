@@ -3,30 +3,43 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Advanced Mood Quiz</title>
+<title>Dark Mood Quiz</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
 body {
   margin:0; font-family:sans-serif; min-height:100vh; display:flex; justify-content:center; align-items:center;
-  transition:background 1s ease; color:white; overflow:hidden;
+  background:#111722; color:white; overflow:hidden; transition: background 1s ease;
 }
 .quiz-container {
-  max-width: 700px; text-align:center; padding:30px; border-radius:12px; position:relative; z-index:2; background: rgba(0,0,0,0.3);
+  max-width: 700px; text-align:center; padding:30px; border-radius:12px; position:relative; z-index:2; background: rgba(0,0,0,0.6);
 }
 .fade-in { animation: fadeIn 0.8s ease forwards; }
 .fade-out { animation: fadeOut 0.8s ease forwards; }
 @keyframes fadeIn { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform:translateY(0); } }
 @keyframes fadeOut { from { opacity:1; } to { opacity:0; } }
+
 .option {
-  background: rgba(35,49,72,0.8); padding:12px 20px; margin:10px 0; border-radius:8px; cursor:pointer;
+  background: rgba(35,49,72,0.8); padding:12px 20px; margin:10px 0; border-radius:12px; cursor:pointer;
   transition: transform 0.3s, background 0.3s;
 }
-.option:hover { transform:scale(1.05); background: rgba(50,70,100,0.9); }
+.option:hover {
+  transform: scale(1.1);
+  background: linear-gradient(270deg, #ff0080, #ff8c00, #40e0d0, #8a2be2, #ff0080);
+  background-size: 1000% 1000%;
+  animation: rainbow 5s ease infinite;
+}
+@keyframes rainbow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
 .background-layer {
-  position:absolute; width:200%; height:200%; top:-50%; left:-50%; opacity:0.1; border-radius:50%;
-  animation:move 20s linear infinite; z-index:1;
+  position:absolute; width:200%; height:200%; top:-50%; left:-50%; opacity:0.08; border-radius:50%;
+  animation:move 25s linear infinite; z-index:1;
 }
 @keyframes move { 0%{transform:translate(0,0) rotate(0deg);} 100%{transform:translate(100px,100px) rotate(360deg);} }
+
 </style>
 </head>
 <body>
@@ -37,16 +50,13 @@ body {
 </div>
 
 <script>
-// ----------------------------
-// Configuração do quiz
-// ----------------------------
 const moods = ['happy','sad','angry','lonely','anxious'];
 const moodColors = {
-  happy:["#fffa65","#fff89a","#ffe066"],
-  sad:["#6c5ce7","#a29bfe","#341f97"],
-  angry:["#e74c3c","#ff7675","#c0392b"],
-  lonely:["#3498db","#74b9ff","#0984e3"],
-  anxious:["#1abc9c","#55efc4","#16a085"]
+  happy:["#ffd700","#fffa65","#ffe066","#fff89a"],
+  sad:["#6c5ce7","#a29bfe","#341f97","#74b9ff"],
+  angry:["#e74c3c","#ff7675","#c0392b","#ff4d4d"],
+  lonely:["#3498db","#74b9ff","#0984e3","#5dade2"],
+  anxious:["#1abc9c","#55efc4","#16a085","#48c9b0"]
 }
 
 // Função para gerar múltiplas camadas de fundo
@@ -58,80 +68,35 @@ function generateBackground(stepKey){
     const div = document.createElement('div');
     div.className='background-layer';
     div.style.background=`radial-gradient(circle, ${colors[i%colors.length]} 0%, transparent 70%)`;
-    div.style.animationDuration = `${10 + i*2}s`;
+    div.style.animationDuration = `${15 + i*2}s`;
     div.style.opacity = 0.05 + 0.05*i;
     document.body.appendChild(div);
   }
 }
 
-// ----------------------------
-// Estrutura do quiz
-// ----------------------------
+// Estrutura do quiz (exemplo inicial, depois podemos expandir p/ 20+ perguntas cada humor)
 const quizData = {
-  start:{
-    question:"How are you feeling today?",
-    options: moods.map(m=>({text:m.charAt(0).toUpperCase()+m.slice(1), next:m}))
-  },
-  // HAPPY
-  happy: { question:"What is making you happy?", options:[{text:"Achievements", next:"happy2"},{text:"Friends", next:"happy2"},{text:"Hobbies", next:"happy2"}]},
-  happy2: { question:"Do you like sharing your happiness?", options:[{text:"Yes", next:"happy3"},{text:"No", next:"happy3"}]},
-  happy3: { question:"Do you celebrate small wins?", options:[{text:"Always", next:"happy4"},{text:"Sometimes", next:"happy4"},{text:"Rarely", next:"happy4"}]},
-  happy4: { question:"Do you spend time outdoors?", options:[{text:"Yes", next:"happy5"},{text:"No", next:"happy5"}]},
-  happy5: { question:"Do you exercise regularly?", options:[{text:"Yes", next:"happy6"},{text:"No", next:"happy6"}]},
-  happy6: { question:"Do you enjoy music?", options:[{text:"Yes", next:"happy7"},{text:"No", next:"happy7"}]},
-  happy7: { question:"Do you try new activities?", options:[{text:"Yes", next:"happy8"},{text:"No", next:"happy8"}]},
-  happy8: { question:"Do you express gratitude?", options:[{text:"Yes", next:"happy9"},{text:"No", next:"happy9"}]},
-  happy9: { question:"Do you help others often?", options:[{text:"Yes", next:"happy10"},{text:"No", next:"happy10"}]},
-  happy10: { advice:"Keep embracing what makes you happy! Share your joy, enjoy every moment, and spread positivity 🌞"},
-  // SAD
-  sad: { question:"Why are you sad?", options:[{text:"Work/School", next:"sad2"},{text:"Relationships", next:"sad2"},{text:"Feeling alone", next:"sad2"}]},
-  sad2: { question:"Do you talk to someone about it?", options:[{text:"Yes", next:"sad3"},{text:"No", next:"sad3"}]},
-  sad3: { question:"Do you do activities you enjoy?", options:[{text:"Yes", next:"sad4"},{text:"No", next:"sad4"}]},
-  sad4: { question:"Do you exercise?", options:[{text:"Yes", next:"sad5"},{text:"No", next:"sad5"}]},
-  sad5: { question:"Do you rest enough?", options:[{text:"Yes", next:"sad6"},{text:"No", next:"sad6"}]},
-  sad6: { question:"Do you write your feelings?", options:[{text:"Yes", next:"sad7"},{text:"No", next:"sad7"}]},
-  sad7: { question:"Do you spend time outside?", options:[{text:"Yes", next:"sad8"},{text:"No", next:"sad8"}]},
-  sad8: { question:"Do you meditate?", options:[{text:"Yes", next:"sad9"},{text:"No", next:"sad9"}]},
-  sad9: { question:"Do you listen to music?", options:[{text:"Yes", next:"sad10"},{text:"No", next:"sad10"}]},
-  sad10: { advice:"Take small steps to feel better: talk to someone you trust, write your feelings, rest, and be kind to yourself 🌧️"},
-  // ANGRY
-  angry: { question:"What made you angry?", options:[{text:"Someone said something", next:"angry2"},{text:"Something didn't go as planned", next:"angry2"},{text:"Other", next:"angry2"}]},
-  angry2: { question:"Do you release your anger?", options:[{text:"Yes", next:"angry3"},{text:"No", next:"angry3"}]},
-  angry3: { question:"Do you meditate or breathe deeply?", options:[{text:"Yes", next:"angry4"},{text:"No", next:"angry4"}]},
-  angry4: { question:"Do you exercise to release tension?", options:[{text:"Yes", next:"angry5"},{text:"No", next:"angry5"}]},
-  angry5: { question:"Do you write your feelings?", options:[{text:"Yes", next:"angry6"},{text:"No", next:"angry6"}]},
-  angry6: { question:"Do you listen to soothing music?", options:[{text:"Yes", next:"angry7"},{text:"No", next:"angry7"}]},
-  angry7: { question:"Do you talk to someone?", options:[{text:"Yes", next:"angry8"},{text:"No", next:"angry8"}]},
-  angry8: { question:"Do you take breaks?", options:[{text:"Yes", next:"angry9"},{text:"No", next:"angry9"}]},
-  angry9: { question:"Do you practice mindfulness?", options:[{text:"Yes", next:"angry10"},{text:"No", next:"angry10"}]},
-  angry10: { advice:"Release your anger safely: breathe, move your body, write down feelings, and relax 💥"},
-  // LONELY
-  lonely: { question:"Why do you feel lonely?", options:[{text:"No friends around", next:"lonely2"},{text:"Feeling misunderstood", next:"lonely2"},{text:"Other", next:"lonely2"}]},
-  lonely2: { question:"Do you try to reach out?", options:[{text:"Yes", next:"lonely3"},{text:"No", next:"lonely3"}]},
-  lonely3: { question:"Do you have hobbies?", options:[{text:"Yes", next:"lonely4"},{text:"No", next:"lonely4"}]},
-  lonely4: { question:"Do you engage in online communities?", options:[{text:"Yes", next:"lonely5"},{text:"No", next:"lonely5"}]},
-  lonely5: { question:"Do you spend time with pets?", options:[{text:"Yes", next:"lonely6"},{text:"No", next:"lonely6"}]},
-  lonely6: { question:"Do you try creative projects?", options:[{text:"Yes", next:"lonely7"},{text:"No", next:"lonely7"}]},
-  lonely7: { question:"Do you connect with friends via chat/video?", options:[{text:"Yes", next:"lonely8"},{text:"No", next:"lonely8"}]},
-  lonely8: { question:"Do you write letters or notes?", options:[{text:"Yes", next:"lonely9"},{text:"No", next:"lonely9"}]},
-  lonely9: { question:"Do you take care of yourself?", options:[{text:"Yes", next:"lonely10"},{text:"No", next:"lonely10"}]},
-  lonely10: { advice:"Connect with someone: call a friend, join communities, engage in hobbies, and practice self-care 🤝"},
-  // ANXIOUS
-  anxious: { question:"What is causing your anxiety?", options:[{text:"Work/School", next:"anxious2"},{text:"Relationships", next:"anxious2"},{text:"Future uncertainty", next:"anxious2"}]},
-  anxious2: { question:"Do you meditate?", options:[{text:"Yes", next:"anxious3"},{text:"No", next:"anxious3"}]},
-  anxious3: { question:"Do you write down worries?", options:[{text:"Yes", next:"anxious4"},{text:"No", next:"anxious4"}]},
-  anxious4: { question:"Do you do deep breathing?", options:[{text:"Yes", next:"anxious5"},{text:"No", next:"anxious5"}]},
-  anxious5: { question:"Do you take walks outside?", options:[{text:"Yes", next:"anxious6"},{text:"No", next:"anxious6"}]},
-  anxious6: { question:"Do you exercise?", options:[{text:"Yes", next:"anxious7"},{text:"No", next:"anxious7"}]},
-  anxious7: { question:"Do you limit stressful news?", options:[{text:"Yes", next:"anxious8"},{text:"No", next:"anxious8"}]},
-  anxious8: { question:"Do you listen to calming music?", options:[{text:"Yes", next:"anxious9"},{text:"No", next:"anxious9"}]},
-  anxious9: { question:"Do you visualize peaceful places?", options:[{text:"Yes", next:"anxious10"},{text:"No", next:"anxious10"}]},
-  anxious10: { advice:"Calm your mind: meditate, breathe deeply, focus on controllable things, and practice self-care 🌿"}
+  start:{ question:"How are you feeling today?", options:moods.map(m=>({text:m.charAt(0).toUpperCase()+m.slice(1), next:m}))},
+  happy: { question:"What makes you happy?", options:[{text:"Achievements", next:"happy2"},{text:"Friends", next:"happy2"},{text:"Hobbies", next:"happy2"}]},
+  happy2: { question:"Do you share your happiness?", options:[{text:"Yes", next:"happy3"},{text:"No", next:"happy3"}]},
+  happy3: { question:"Do you celebrate small wins?", options:[{text:"Always", next:"happy4"},{text:"Sometimes", next:"happy4"}]},
+  happy4: { advice:"Keep embracing joy! Share your happiness and enjoy every moment 🌞"},
+
+  sad: { question:"Why are you sad?", options:[{text:"Work/School", next:"sad2"},{text:"Relationships", next:"sad2"}]},
+  sad2: { question:"Do you talk to someone?", options:[{text:"Yes", next:"sad3"},{text:"No", next:"sad3"}]},
+  sad3: { advice:"Take small steps: talk to someone, write your feelings, rest, and be kind to yourself 🌧️"},
+
+  angry: { question:"What made you angry?", options:[{text:"Someone", next:"angry2"},{text:"Something else", next:"angry2"}]},
+  angry2: { advice:"Release anger safely: breathe, move your body, write down feelings 💥"},
+
+  lonely: { question:"Why do you feel lonely?", options:[{text:"No friends", next:"lonely2"},{text:"Feeling misunderstood", next:"lonely2"}]},
+  lonely2: { advice:"Connect with someone: call a friend, join communities, engage in hobbies 🤝"},
+
+  anxious: { question:"What is causing your anxiety?", options:[{text:"Work/School", next:"anxious2"},{text:"Relationships", next:"anxious2"}]},
+  anxious2: { advice:"Calm your mind: meditate, breathe deeply, focus on controllable things 🌿"}
 };
 
-// ----------------------------
 // Lógica do quiz
-// ----------------------------
 const quizContainer = document.getElementById("quiz");
 let optionsDiv = document.getElementById("options");
 
@@ -161,6 +126,8 @@ function showStep(stepKey){
       const btn = document.createElement("div");
       btn.className="option";
       btn.innerText=opt.text;
+      btn.onmouseenter = ()=> btn.classList.add('rainbow-hover');
+      btn.onmouseleave = ()=> btn.classList.remove('rainbow-hover');
       btn.onclick=()=>showStep(opt.next);
       optionsDiv.appendChild(btn);
     });
