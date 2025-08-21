@@ -40,17 +40,37 @@ const moodColors = {
 }
 
 // Função para gerar múltiplas camadas de fundo
-function generateBackground(mood){
-  document.querySelectorAll('.background-layer').forEach(el=>el.remove());
-  const colors = moodColors[mood];
-  for(let i=0;i<10;i++){
-    const div = document.createElement('div');
-    div.className='background-layer';
-    div.style.background=`radial-gradient(circle, ${colors[i%colors.length]} 0%, transparent 70%)`;
-    div.style.animationDuration = `${10 + i*2}s`;
-    div.style.opacity = 0.05 + 0.05*i;
-    document.body.appendChild(div);
-  }
+function showStep(stepKey){
+  const step = quizData[stepKey];
+  generateBackground(stepKey); // muda fundo animado apenas se for mood
+  optionsDiv.innerHTML='';
+  quizContainer.classList.remove("fade-in");
+  quizContainer.classList.add("fade-out");
+
+  setTimeout(()=>{
+    quizContainer.classList.remove("fade-out");
+    quizContainer.classList.add("fade-in");
+
+    if(step.advice){
+      quizContainer.innerHTML=`<h1 class="text-3xl mb-6">Advice for you:</h1>
+                               <p class="text-xl">${step.advice}</p>`;
+      return;
+    }
+
+    quizContainer.innerHTML=`<h1 class="text-3xl mb-6">${step.question}</h1>`;
+    const newOptionsDiv = document.createElement("div");
+    newOptionsDiv.id="options";
+    quizContainer.appendChild(newOptionsDiv);
+
+    step.options.forEach(opt=>{
+      const btn = document.createElement("div");
+      btn.className="option";
+      btn.innerText=opt.text;
+      btn.onclick=()=>showStep(opt.next);
+      newOptionsDiv.appendChild(btn);
+    });
+
+  },400);
 }
 
 // Estrutura de 10 camadas de perguntas
